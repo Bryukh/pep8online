@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+    <form name="code_form">
+    <div class="span8">
+        <h3>Just paste your code here</h3>
+
+        <label for="code">
+        <textarea id="code" name="code" rows="20" class="span7" placeholder="Paste code">
+            
+        </textarea>
+        </label>
+        <button type="submit" class="btn span3">Check code</button>
+    </div>
+    <div class="span4">
+        <h3>Options</h3>
+    </div>
+    </form>
+{%  endblock %}
