@@ -4,14 +4,13 @@ import StringIO
 import sys
 import os
 import tempfile
-
-TEMP_PATH = './temp/'
+import settings
 
 def check_text(text):
     """
     check text for pep8 requirements
     """
-    code_file, code_filename = tempfile.mkstemp(dir=TEMP_PATH)
+    code_file, code_filename = tempfile.mkstemp(dir=settings.TEMP_PATH)
     with open(code_filename, 'w') as code_file:
         code_file.write(text.decode('utf8'))
     temp_outfile = StringIO.StringIO()
