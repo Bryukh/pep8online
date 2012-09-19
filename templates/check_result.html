@@ -1,10 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
-    <div class="span8">
-        <pre>{{ code_text }}
-        </pre>
-    </div>
-    <div class="span4">
+        <h1>Checking results</h1>
+
         <table class="table">
             <thead>
             <tr>
@@ -46,5 +43,5 @@
 
             </tbody>
         </table>
-    </div>
+    <pre><code class="python">{{ code_text }}</code></pre>
 {% endblock %}
