@@ -6,6 +6,25 @@ import os
 import tempfile
 import settings
 
+def pep8_str2dict(strings):
+    """
+    Convert strings from pep8 results to dictionary
+    """
+    res_dict = []
+    for s in strings[1:]:
+        temp = s.split(":")
+        if len(temp) < 4:
+            continue
+        print temp
+        temp_dict = {'type': temp[3][1],
+                     'code': temp[3][2:5],
+                     'line': temp[1],
+                     'place': temp[2],
+                     'text': temp[3][6:]}
+        print temp_dict
+        res_dict.append(temp_dict)
+    return res_dict
+
 def check_text(text):
     """
     check text for pep8 requirements
@@ -24,7 +43,9 @@ def check_text(text):
     temp_outfile.close()
     code_file.close()
     os.remove(code_filename)
-    return '<br>'.join(result)
+    result_dict = pep8_str2dict(result)
+    return result_dict
+
 
 if __name__ == '__main__':
     pass

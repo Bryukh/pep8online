@@ -26,7 +26,8 @@ def check_result():
             result = "Empty request"
         result = check_text(code_text)
     context = {
-        'result': result
+        'result': result,
+        'code_text': code_text,
     }
     return render_template("check_result.html", **context)
 

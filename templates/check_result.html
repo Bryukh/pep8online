@@ -1,4 +1,50 @@
 {% extends "base.html" %}
 {% block content %}
-    {{ result|safe }}
-{%  endblock %}
+    <div class="span8">
+        <pre>{{ code_text }}
+        </pre>
+    </div>
+    <div class="span4">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>
+                    Code
+                </th>
+                <th>
+                    Line
+                </th>
+                <th>
+                    Place
+                </th>
+                <th>
+                    Text
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for res in result %}
+                <tr>
+                    <td>
+                        {% if res.type == "W" %}
+                            <span class="label label-warning">W{{ res.code }}</span>
+                        {% elif res.type == "E" %}
+                            <span class="label label-important">E{{ res.code }}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ res.line }}
+                    </td>
+                    <td>
+                        {{ res.place }}
+                    </td>
+                    <td>
+                        {{ res.text }}
+                    </td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
