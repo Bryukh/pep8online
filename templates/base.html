@@ -1,8 +1,8 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-    <meta http-equiv="Content-Language" content="ru-ru" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Language" content="ru-ru"/>
 
     <script src="/static/highlight/highlight.pack.js" type="text/javascript"></script>
     <script>hljs.initHighlightingOnLoad();</script>
@@ -11,45 +11,45 @@
     <link rel="stylesheet" href="/static/highlight/styles/default.css" type="text/css">
 </head>
 <body>
-    <div class="container">
-        <div class="navbar">
-            <div class="navbar-inner">
-                <ul class="nav">
-                        <li>
-                            <a href="/">Check code</a>
-                        </li>
-                        </ul>
-                    <ul class="nav pull-right">
-                        <li>
-                            <a href="about">About</a>
-                        </li>
-                    </ul>
+<div class="container">
+    <div class="navbar">
+        <div class="navbar-inner">
+            <ul class="nav">
+                <li>
+                    <a href="/">Check code</a>
+                </li>
+            </ul>
+            <ul class="nav pull-right">
+                <li>
+                    <a href="about">About</a>
+                </li>
+            </ul>
 
-            </div>
-        </div>
-        <div class="page-header">
-            <h2>PEP8 online</h2>
-            <h4>Check your code for PEP8 requirements</h4>
         </div>
     </div>
-    <div class="container">
-        <div class="row">
-            {% block content %}
-
-            {% endblock %}
-        </div>
+    <div class="page-header">
+        <h2>PEP8 online</h2>
+        <h4>Check your code for PEP8 requirements</h4>
     </div>
-    <div class="container">
+</div>
+<div class="container">
+    <div class="row">
+        {% block content %}
+
+        {% endblock %}
+    </div>
+</div>
+<div class="container">
     <hr>
-        <footer class="footer">
+    <footer class="footer">
         <div class="span6">
-        Built by <a href="http://bruykh.com">Valentin Bryukhanov</a>.<br>
-        Designed with Twitter Bootstrap.
-        Powered by Flask.<br>
-        Icons from Glyphicons Free.<br>
+            Built by <a href="http://bruykh.com">Valentin Bryukhanov</a>.<br>
+            Designed with Twitter Bootstrap.
+            Powered by Flask.<br>
+            Icons from Glyphicons Free.<br>
             &nbsp;
         </div>
-        </footer>
-    </div>
+    </footer>
+</div>
 </body>
 </html>

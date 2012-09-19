@@ -15,15 +15,14 @@ def pep8_str2dict(strings):
         temp = s.split(":")
         if len(temp) < 4:
             continue
-        print temp
         temp_dict = {'type': temp[3][1],
                      'code': temp[3][2:5],
                      'line': temp[1],
                      'place': temp[2],
                      'text': temp[3][6:]}
-        print temp_dict
         res_dict.append(temp_dict)
     return res_dict
+
 
 def check_text(text):
     """

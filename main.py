@@ -11,7 +11,8 @@ def paste_page():
     """
     return render_template("paste_page.html")
 
-@app.route("/checkresult", methods=['POST',])
+
+@app.route("/checkresult", methods=['POST', ])
 def check_result():
     """
     Show results for checked code
@@ -30,7 +31,6 @@ def check_result():
         'code_text': code_text,
     }
     return render_template("check_result.html", **context)
-
 
 
 #For development
