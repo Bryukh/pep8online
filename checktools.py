@@ -4,7 +4,6 @@ import StringIO
 import sys
 import os
 import tempfile
-import settings
 
 def pep8_str2dict(strings):
     """
@@ -24,11 +23,11 @@ def pep8_str2dict(strings):
     return res_dict
 
 
-def check_text(text):
+def check_text(text, temp_dir):
     """
     check text for pep8 requirements
     """
-    code_file, code_filename = tempfile.mkstemp(dir=settings.TEMP_PATH)
+    code_file, code_filename = tempfile.mkstemp(dir=temp_dir)
     with open(code_filename, 'w') as code_file:
         code_file.write(text.decode('utf8'))
     temp_outfile = StringIO.StringIO()
