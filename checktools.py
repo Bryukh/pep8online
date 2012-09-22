@@ -5,11 +5,11 @@ import sys
 import os
 import tempfile
 
-def pep8_str2dict(strings):
+def pep8parser(strings):
     """
-    Convert strings from pep8 results to dictionary
+    Convert strings from pep8 results to list of dictionaries
     """
-    res_dict = []
+    result_list = []
     for s in strings[1:]:
         temp = s.split(":")
         if len(temp) < 4:
@@ -19,31 +19,35 @@ def pep8_str2dict(strings):
                      'line': temp[1],
                      'place': temp[2],
                      'text': temp[3][6:]}
-        res_dict.append(temp_dict)
-    return res_dict
+        result_list.append(temp_dict)
+    return result_list
 
 
 def check_text(text, temp_dir, add_options=None):
     """
     check text for pep8 requirements
     """
+    #prepare code
     code_file, code_filename = tempfile.mkstemp(dir=temp_dir)
     with open(code_filename, 'w') as code_file:
         code_file.write(text.decode('utf8'))
-    temp_outfile = StringIO.StringIO()
-    sys.stdout = temp_outfile
+    #initialize pep8 checker
     pep8style = pep8.StyleGuide(parse_argv=False, config_file=False)
     options = pep8style.options
     if add_options:
         options._update_careful(add_options)
     checker = pep8.Checker(code_filename, options=options)
+    #redirect print and get result
+    temp_outfile = StringIO.StringIO()
+    sys.stdout = temp_outfile
     checker.check_all()
     sys.stdout = sys.__stdout__
     result = temp_outfile.buflist[:]
+    #clear all
     temp_outfile.close()
     code_file.close()
     os.remove(code_filename)
-    result_dict = pep8_str2dict(result)
+    result_dict = pep8parser(result)
     return result_dict
 
 
