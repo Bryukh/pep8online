@@ -15,7 +15,7 @@ def paste_page():
 
 @app.route("/about")
 def about():
-    "About page"
+    """About page"""
     return render_template("about.html")
 
 @app.route("/checkresult", methods=['POST', ])
@@ -25,6 +25,7 @@ def check_result():
     """
     result = ''
     max_line_length = 79
+    code_text = ''
     if request.method == "POST":
         try:
             code_text = request.form["code"]
@@ -32,9 +33,10 @@ def check_result():
         except KeyError:
             abort(404)
         if not code_text:
-            result = "Empty request"
-        options = {'max_line_length': max_line_length}
-        result = check_text(code_text, app.settings.TEMP_PATH, options)
+            result = ""
+        else:
+            options = {'max_line_length': max_line_length}
+            result = check_text(code_text, app.settings.TEMP_PATH, options)
     context = {
         'result': result,
         'code_text': code_text,
@@ -45,6 +47,7 @@ def check_result():
 #For development
 if __name__ == '__main__':
     try:
+        #noinspection PyUnresolvedReferences
         import development_settings
         app.settings = development_settings
     except ImportError:
