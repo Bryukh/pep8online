@@ -13,6 +13,10 @@ def paste_page():
     """
     return render_template("paste_page.html")
 
+@app.route("/about")
+def about():
+    "About page"
+    return render_template("about.html")
 
 @app.route("/checkresult", methods=['POST', ])
 def check_result():

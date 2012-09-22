@@ -1,4 +1,6 @@
 *.pyc
 .idea
 env
+fabfile.py
+*.http
 
