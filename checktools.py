@@ -23,7 +23,7 @@ def pep8_str2dict(strings):
     return res_dict
 
 
-def check_text(text, temp_dir):
+def check_text(text, temp_dir, add_options=None):
     """
     check text for pep8 requirements
     """
@@ -34,6 +34,8 @@ def check_text(text, temp_dir):
     sys.stdout = temp_outfile
     pep8style = pep8.StyleGuide(parse_argv=False, config_file=False)
     options = pep8style.options
+    if add_options:
+        options._update_careful(add_options)
     checker = pep8.Checker(code_filename, options=options)
     checker.check_all()
     sys.stdout = sys.__stdout__

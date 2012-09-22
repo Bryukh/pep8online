@@ -20,14 +20,17 @@ def check_result():
     Show results for checked code
     """
     result = ''
+    max_line_length = 79
     if request.method == "POST":
         try:
             code_text = request.form["code"]
+            max_line_length = request.form["max_line_length_slide"]
         except KeyError:
             abort(404)
         if not code_text:
             result = "Empty request"
-        result = check_text(code_text, app.settings.TEMP_PATH)
+        options = {'max_line_length': max_line_length}
+        result = check_text(code_text, app.settings.TEMP_PATH, options)
     context = {
         'result': result,
         'code_text': code_text,
