@@ -36,10 +36,10 @@ def check_text(text, temp_dir, add_options=None):
     options = pep8style.options
     if add_options:
         options._update_careful(add_options)
-    checker = pep8.Checker(code_filename, options=options)
     #redirect print and get result
     temp_outfile = StringIO.StringIO()
     sys.stdout = temp_outfile
+    checker = pep8.Checker(code_filename, options=options)
     checker.check_all()
     sys.stdout = sys.__stdout__
     result = temp_outfile.buflist[:]

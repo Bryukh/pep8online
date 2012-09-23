@@ -1,12 +1,33 @@
 {% extends "base.html" %}
 {% block content %}
+    <style type="text/css" media="screen">
+
+        #editor {
+            height: 300px;
+            width: 90%;
+            margin: 20px;
+            position: relative;
+            padding-bottom: 20px;
+{#            padding: 50px;#}
+        }
+    </style>
     <form name="code_form" action="/checkresult" method="POST">
         <div class="span8">
             <h3>Just paste your code here</h3>
-
             <label for="code">
-                <textarea id="code" name="code" rows="20" class="span7 prettyprint" placeholder="Paste code"></textarea>
+                <input type="hidden" id="code" name="code" value="">
             </label>
+            <pre id="editor" style="padding: 0px;"></pre>
+            <script src="/static/ace/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+            <script>
+                var editor = ace.edit("editor");
+                var textarea = document.getElementById('code');
+                editor.setTheme("ace/theme/chrome");
+                editor.getSession().setMode("ace/mode/python");
+                editor.getSession().on('change', function(){
+                    textarea.value = editor.getSession().getValue();
+                });
+            </script>
             <button type="submit" class="btn span3">Check code</button>
         </div>
         <div class="span4">
@@ -23,4 +44,5 @@
             </script>
         </div>
     </form>
+
 {% endblock %}
