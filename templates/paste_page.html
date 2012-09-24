@@ -1,18 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
-    <style type="text/css" media="screen">
 
-        #editor {
-            height: 300px;
-            width: 90%;
-            margin: 20px;
-            position: relative;
-            padding-bottom: 20px;
-{#            padding: 50px;#}
-        }
-    </style>
     <form name="code_form" action="/checkresult" method="POST">
-        <div class="span8">
+        <div class="span12">
             <h3>Just paste your code here</h3>
             <label for="code">
                 <input type="hidden" id="code" name="code" value="">
@@ -29,19 +19,6 @@
                 });
             </script>
             <button type="submit" class="btn span3">Check code</button>
-        </div>
-        <div class="span4">
-            <h3>Options</h3>
-            Max line length = <span id="max_line_length">79</span>
-
-            <label>
-                <input name="max_line_length_slide" id="max_line_length_slide" type="range" max="240" min="79" value="79">
-            </label>
-            <script type="text/javascript">
-                document.getElementById('max_line_length_slide').onchange = function() {
-                    document.getElementById("max_line_length").innerHTML = this.value
-                };
-            </script>
         </div>
     </form>
 

@@ -50,6 +50,26 @@
             <h2>Empty request</h2>
         {%  endif %}
         <h2>Your code</h2>
-        <pre class="prettyprint linenums lang-python">{{ code_text }}</pre>
+        <form name="code_form" action="/checkresult" method="POST">
+            <div class="span12">
+                <label for="code">
+                    <input type="hidden" id="code" name="code" value="">
+                </label>
+                <pre id="editor" style="padding: 0px;">{{ code_text }}</pre>
+                <script src="/static/ace/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+                <script>
+                    var editor = ace.edit("editor");
+                    var textarea = document.getElementById('code');
+                    textarea.value = editor.getSession().getValue();
+                    editor.setTheme("ace/theme/chrome");
+                    editor.getSession().setMode("ace/mode/python");
+                    editor.getSession().on('change', function(){
+                        textarea.value = editor.getSession().getValue();
+                    });
+                </script>
+                <button type="submit" class="btn span3">Check again</button>
+            </div>
+        </form>
+{#        <pre class="prettyprint linenums lang-python">{{ code_text }}</pre>#}
 
 {% endblock %}
