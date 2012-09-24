@@ -3,7 +3,16 @@ from flask import Flask, render_template, request, abort
 from checktools import check_text
 
 app = Flask(__name__)
-app.config.from_object('settings')
+try:
+    app.config.from_object('production_settings')
+except ImportError:
+    app.config.from_object('settings')
+
+if app.config['LOG']:
+    import logging
+    file_handler = logging.FileHandler(app.config['LOG_FILE'])
+    app.logger.addHandler(file_handler)
+    app.logger.setLevel(logging.DEBUG)
 
 @app.route("/")
 def paste_page():
@@ -34,7 +43,9 @@ def check_result():
             result = ""
         else:
             options = {'max_line_length': max_line_length}
-            result = check_text(code_text, app.config['TEMP_PATH'], options)
+            result = check_text(code_text, app.config['TEMP_PATH'], options,
+                logger=app.logger if app.config['LOG'] else None)
+
     context = {
         'result': result,
         'code_text': code_text,
@@ -48,4 +59,5 @@ if __name__ == '__main__':
         app.config.from_object('development_settings')
     except ImportError:
         pass
+    print app.config
     app.run(debug=True)

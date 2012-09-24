@@ -3,4 +3,5 @@
 env
 fabfile.py
 *.http
-
+production_settings.py
+development_settings.py

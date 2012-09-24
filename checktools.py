@@ -23,7 +23,7 @@ def pep8parser(strings):
     return result_list
 
 
-def check_text(text, temp_dir, add_options=None):
+def check_text(text, temp_dir, add_options=None, logger=None):
     """
     check text for pep8 requirements
     """
@@ -48,6 +48,8 @@ def check_text(text, temp_dir, add_options=None):
     code_file.close()
     os.remove(code_filename)
     result_dict = pep8parser(result)
+    if logger:
+        logger.debug(result)
     return result_dict
 
 
