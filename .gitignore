@@ -1,7 +1,7 @@
 *.pyc
 .idea
 env
-fabfile.py
-*.http
-production_settings.py
 development_settings.py
+deployment/
+fabfile.py
+logs/

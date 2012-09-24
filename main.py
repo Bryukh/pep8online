@@ -6,7 +6,10 @@ app = Flask(__name__)
 try:
     app.config.from_object('production_settings')
 except ImportError:
-    app.config.from_object('settings')
+    try:
+        app.config.from_object('development_settings')
+    except ImportError:
+        app.config.from_object('settings')
 
 if app.config['LOG']:
     import logging
@@ -59,5 +62,4 @@ if __name__ == '__main__':
         app.config.from_object('development_settings')
     except ImportError:
         pass
-    print app.config
     app.run(debug=True)

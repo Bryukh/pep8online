@@ -10,7 +10,7 @@ def pep8parser(strings):
     Convert strings from pep8 results to list of dictionaries
     """
     result_list = []
-    for s in strings[1:]:
+    for s in strings:
         temp = s.split(":")
         if len(temp) < 4:
             continue
