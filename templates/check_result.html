@@ -3,7 +3,7 @@
         {% if result and code_text %}
             <h1>Check results</h1>
 
-            <table class="table">
+            <table class="table" id="result_table">
                 <thead>
                 <tr>
                     <th>
@@ -22,7 +22,7 @@
                 </thead>
                 <tbody>
                 {% for res in result %}
-                    <tr>
+                    <tr onclick="">
                         <td>
                             {% if res.type == "W" %}
                                 <span class="label label-warning">W{{ res.code }}</span>
@@ -63,9 +63,23 @@
                     textarea.value = editor.getSession().getValue();
                     editor.setTheme("ace/theme/chrome");
                     editor.getSession().setMode("ace/mode/python");
+                    editor.setHighlightActiveLine(true);
                     editor.getSession().on('change', function(){
                         textarea.value = editor.getSession().getValue();
                     });
+                    editor.gotoLine(1);
+                    var resTable = document.getElementById('result_table');
+                    var resLines = resTable.getElementsByTagName('tr');
+                    var editorText = document.getElementsByClassName('ace_text-layer');
+                    for (var i=1; i<resLines.length; i++) {
+                        var lineNumber = parseInt(resLines[i].getElementsByTagName('td')[1].innerText);
+                        resLines[i].onclick = function(lNumb) {
+                            return function() {
+                                editorText[0].getElementsByClassName('ace_line')[lNumb-1].scrollIntoView(false);
+                                editor.gotoLine(lNumb);
+                            }
+                        }(lineNumber);
+                    }
                 </script>
                 <button type="submit" class="btn span3">Check again</button>
             </div>
