@@ -85,8 +85,7 @@
 
                                 if (!isNaN(lineNumber)) {
                                     lineNumber = parseInt(lineNumber);
-                                    console.log("line", lineNumber-1, isNaN(lineNumber));
-                                    editorText[0].getElementsByClassName('ace_line')[lineNumber - 1].scrollIntoView(false);
+                                    editorText[0].scrollIntoView();
                                     editor.gotoLine(lineNumber);
                                     return;
                                 } else {
@@ -101,6 +100,5 @@
                 <button type="submit" class="btn span3">Check again</button>
             </div>
         </form>
-{#        <pre class="prettyprint linenums lang-python">{{ code_text }}</pre>#}
 
 {% endblock %}
