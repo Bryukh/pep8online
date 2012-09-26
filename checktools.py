@@ -30,7 +30,7 @@ def check_text(text, temp_dir, add_options=None, logger=None):
     #prepare code
     code_file, code_filename = tempfile.mkstemp(dir=temp_dir)
     with open(code_filename, 'w') as code_file:
-        code_file.write(text.decode('utf8'))
+        code_file.write(text.encode('utf8'))
     #initialize pep8 checker
     pep8style = pep8.StyleGuide(parse_argv=False, config_file=False)
     options = pep8style.options
