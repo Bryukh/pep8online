@@ -74,7 +74,6 @@
                         event = event || window.event;
                         var target = event.target || event.srcElement;
                         while (target != this) {
-                            console.log(target.tagName);
                             if (target.tagName == 'TR') {
                                 var rowTds = target.getElementsByTagName('td');
                                 if (rowTds.length <= 2) {
@@ -82,9 +81,8 @@
                                     continue;
                                 }
                                 var lineNumber = target.getElementsByTagName('td')[1].innerText;
-
+                                lineNumber = parseInt(lineNumber);
                                 if (!isNaN(lineNumber)) {
-                                    lineNumber = parseInt(lineNumber);
                                     editorText[0].scrollIntoView();
                                     editor.gotoLine(lineNumber);
                                     return;
