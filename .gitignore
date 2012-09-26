@@ -5,3 +5,4 @@ development_settings.py
 deployment/
 fabfile.py
 logs/
+temp/

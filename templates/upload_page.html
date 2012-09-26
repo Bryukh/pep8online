@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{#{% block additional_head %}#}
+{#<script src="/static/js/bootstrap-fileupload.js"></script>#}
+{#{% endblock %}#}
+{% block content %}
+
+    <form name="upload_file" action="/checkresult" method="POST" class="span6" style="margin-bottom: 0px;">
+        <legend>Upload python file</legend>
+
+        <label for="filename">
+            <div class="input-append">
+
+                <input id="filename" type="text">
+
+                <button class="btn" type="button" onclick="fileUploadClick('code_upload')">
+                    Select File
+                </button>
+            </div>
+        </label>
+        <button type="submit" class="btn span4">Check code</button>
+        <script>
+            var fileUploadClick = function (uploadId) {
+                var fileUpload = document.getElementById(uploadId);
+                fileUpload.click();
+            }
+            var fillFilename = function (event, inputId) {
+                var event = event || window.event;
+                var target = event.target;
+                var inputFilename = document.getElementById(inputId);
+                var filePath = target.value;
+                if (filePath.match(/fakepath/)) {
+                    filePath = filePath.replace(/C:\\fakepath\\/i, '');
+                }
+                inputFilename.value = filePath;
+            }
+        </script>
+        <input type="file" class="hidden_upload" id="code_upload" onchange="fillFilename(event, 'filename')" style="visibility: hidden; height: 1px; margin: 0px;">
+
+    </form>
+
+{% endblock %}

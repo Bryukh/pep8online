@@ -1,5 +1,5 @@
 #-*- encoding: utf8 -*-
-from flask import Flask, render_template, request, abort
+from flask import Flask, render_template, request, abort, url_for
 from checktools import check_text
 
 app = Flask(__name__)
@@ -28,6 +28,13 @@ def paste_page():
 def about():
     """About page"""
     return render_template("about.html")
+
+@app.route("/upload")
+def upload_page():
+    """
+    Main page with form for upload file
+    """
+    return render_template("upload_page.html")
 
 @app.route("/checkresult", methods=['POST', ])
 def check_result():
