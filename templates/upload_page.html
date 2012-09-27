@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <form name="upload_file" action="/checkresult" method="POST" enctype=multipart/form-data class="span6" style="margin-bottom: 0px;">
+        <legend>Upload python file</legend>
+
+        <label for="filename">
+            <div class="input-append">
+                <input id="filename" type="text">
+                <button class="btn" type="button" onclick="fileUploadClick()">
+                    Select File
+                </button>
+            </div>
+        </label>
+        <button type="submit" class="btn span4">Check code</button>
+        <script>
+            var fileUploadClick = function () {
+                var fileUpload = document.getElementById('code_file');
+                fileUpload.click();
+            }
+            var fillFilename = function () {
+                var inputFilename = document.getElementById('filename');
+                var fileUpload = document.getElementById('code_file');
+                var filePath = fileUpload.value;
+                if (filePath.match(/fakepath/)) {
+                    filePath = filePath.replace(/C:\\fakepath\\/i, '');
+                }
+                inputFilename.value = filePath;
+            }
+        </script>
+        <input type="file" name="code_file" class="hidden_upload" id="code_file" onchange="fillFilename()"
+               style="visibility: hidden; height: 1px; margin: 0px;">
+
+    </form>
+
+{% endblock %}

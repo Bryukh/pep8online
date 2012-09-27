@@ -1,6 +1,6 @@
 #-*- encoding: utf8 -*-
-from flask import Flask, render_template, request, abort
-from checktools import check_text
+from flask import Flask, render_template, request, abort, url_for
+from checktools import check_text, is_py_extension
 
 app = Flask(__name__)
 try:
@@ -29,32 +29,47 @@ def about():
     """About page"""
     return render_template("about.html")
 
+@app.route("/upload")
+def upload_page():
+    """
+    Main page with form for upload file
+    """
+    return render_template("upload_page.html")
+
 @app.route("/checkresult", methods=['POST', ])
 def check_result():
     """
     Show results for checked code
     """
-    result = ''
-    max_line_length = 79
-    code_text = ''
-    if request.method == "POST":
-        try:
-            code_text = request.form["code"]
-        except KeyError:
-            abort(404)
-        if not code_text:
-            result = ""
-        else:
-            options = {'max_line_length': max_line_length}
-            result = check_text(code_text, app.config['TEMP_PATH'], options,
-                logger=app.logger if app.config['LOG'] else None)
-
+    back_url = str(request.referrer).replace(request.host_url, '')
     context = {
-        'result': result,
-        'code_text': code_text,
-    }
+        'result': '',
+        'code_text': '',
+        'error': '',
+        'back_url': back_url,
+        }
+    if request.method == "POST":
+        if str(request.referrer).replace(request.host_url, '') == 'upload':
+            code_file = request.files['code_file']
+            if not code_file:
+                context['error'] = 'Forget file'
+                return render_template("check_result.html", **context)
+            if not is_py_extension(code_file.filename):
+                context['error'] = 'Please upload python file'
+                return render_template("check_result.html", **context)
+            context['code_text'] = code_file.read()
+        else:
+            try:
+                context['code_text'] = request.form["code"]
+            except KeyError:
+                abort(404)
+        if not context['code_text']:
+            context['error'] = 'Empty request'
+            return render_template("check_result.html", **context)
+        else:
+            context['result'] = check_text(context['code_text'], app.config['TEMP_PATH'],
+                logger=app.logger if app.config['LOG'] else None)
     return render_template("check_result.html", **context)
-
 
 #For development
 if __name__ == '__main__':

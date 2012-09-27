@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
-        {% if result and code_text %}
+        {% if error %}
+            <h2>{{ error }}</h2>
+        {% elif result and code_text %}
             <h1>Check results</h1>
 
             <table class="table" id="result_table">
@@ -46,57 +48,61 @@
             </table>
         {% elif code_text %}
             <h2>All right!</h2>
-        {% else %}
-            <h2>Empty request</h2>
         {%  endif %}
-        <h2>Your code</h2>
-        <form name="code_form" action="/checkresult" method="POST">
-            <div class="span12">
-                <label for="code">
-                    <input type="hidden" id="code" name="code" value="">
-                </label>
-                <pre id="editor" style="padding: 0px;">{{ code_text }}</pre>
-                <script src="/static/ace/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
-                <script>
-                    var editor = ace.edit("editor");
-                    var textarea = document.getElementById('code');
-                    textarea.value = editor.getSession().getValue();
-                    editor.setTheme("ace/theme/chrome");
-                    editor.getSession().setMode("ace/mode/python");
-                    editor.setHighlightActiveLine(true);
-                    editor.getSession().on('change', function(){
+        {% if error %}
+            <a href="/{{ back_url }}" class="btn"><i class="icon-arrow-left"></i> Back</a>
+        {%  else %}
+            <h2>Your code</h2>
+            <form name="code_form" action="/checkresult" method="POST">
+                <div class="span12">
+                    <label for="code">
+                        <input type="hidden" id="code" name="code" value="">
+                    </label>
+                    <pre id="editor" style="padding: 0px;">{{ code_text }}</pre>
+                    <script src="/static/ace/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+                    <script>
+                        var editor = ace.edit("editor");
+                        var textarea = document.getElementById('code');
                         textarea.value = editor.getSession().getValue();
-                    });
-                    editor.gotoLine(1);
-                    var resTable = document.getElementById('result_table');
-                    var editorText = document.getElementsByClassName('ace_text-layer');
-                    resTable.onclick = function(event) {
-                        event = event || window.event;
-                        var target = event.target || event.srcElement;
-                        while (target != this) {
-                            if (target.tagName == 'TR') {
-                                var rowTds = target.getElementsByTagName('td');
-                                if (rowTds.length <= 2) {
+                        editor.setTheme("ace/theme/chrome");
+                        editor.getSession().setMode("ace/mode/python");
+                        editor.setHighlightActiveLine(true);
+                        editor.getSession().on('change', function(){
+                            textarea.value = editor.getSession().getValue();
+                        });
+                        editor.gotoLine(1);
+                        var resTable = document.getElementById('result_table');
+                        var editorText = document.getElementsByClassName('ace_text-layer');
+                        if (resTable) {
+                            resTable.onclick = function(event) {
+                                event = event || window.event;
+                                var target = event.target || event.srcElement;
+                                while (target != this) {
+                                    if (target.tagName == 'TR') {
+                                        var rowTds = target.getElementsByTagName('td');
+                                        if (rowTds.length <= 2) {
+                                            target = target.parentNode;
+                                            continue;
+                                        }
+                                        var lineNumber = target.getElementsByTagName('td')[1].innerText;
+                                        lineNumber = parseInt(lineNumber);
+                                        if (!isNaN(lineNumber)) {
+                                            editorText[0].scrollIntoView();
+                                            editor.gotoLine(lineNumber);
+                                            return;
+                                        } else {
+                                            target = target.parentNode;
+                                            continue;
+                                        }
+                                    }
                                     target = target.parentNode;
-                                    continue;
                                 }
-                                var lineNumber = target.getElementsByTagName('td')[1].innerText;
-                                lineNumber = parseInt(lineNumber);
-                                if (!isNaN(lineNumber)) {
-                                    editorText[0].scrollIntoView();
-                                    editor.gotoLine(lineNumber);
-                                    return;
-                                } else {
-                                    target = target.parentNode;
-                                    continue;
-                                }
-                            }
-                            target = target.parentNode;
+                            };
                         }
-                    };
-                </script>
-                <button type="submit" class="btn span3">Check again</button>
-            </div>
-        </form>
+                    </script>
+                    <button type="submit" class="btn span3">Check again</button>
+                </div>
+            </form>
+    {% endif %}
 
 {% endblock %}

@@ -8,8 +8,9 @@
     <meta name='yandex-verification' content='76e1922eb437195d' />
 
     <link rel="stylesheet" href="/static/css/bootstrap.css" type="text/css">
-    <link rel="stylesheet" href="/static/css/style.css" type="text/css">
 
+    <link rel="stylesheet" href="/static/css/style.css" type="text/css">
+    {% block additional_head %}{% endblock %}
 </head>
 <body>
 <div class="container">
@@ -18,6 +19,10 @@
             <ul class="nav">
                 <li>
                     <a href="/">Check code</a>
+                </li>
+                <li class="divider-vertical"></li>
+                <li>
+                    <a href="/upload">Upload file</a>
                 </li>
             </ul>
             <ul class="nav pull-right">
