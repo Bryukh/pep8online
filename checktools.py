@@ -23,7 +23,7 @@ def pep8parser(strings):
     return result_list
 
 
-def check_text(text, temp_dir, add_options=None, logger=None):
+def check_text(text, temp_dir, logger=None):
     """
     check text for pep8 requirements
     """
@@ -34,8 +34,6 @@ def check_text(text, temp_dir, add_options=None, logger=None):
     #initialize pep8 checker
     pep8style = pep8.StyleGuide(parse_argv=False, config_file=False)
     options = pep8style.options
-    if add_options:
-        options._update_careful(add_options)
     #redirect print and get result
     temp_outfile = StringIO.StringIO()
     sys.stdout = temp_outfile
@@ -52,6 +50,8 @@ def check_text(text, temp_dir, add_options=None, logger=None):
         logger.debug(result)
     return result_dict
 
+def is_py_extension(filename):
+    return ('.' in filename) and (filename.split('.')[-1] == 'py')
 
 if __name__ == '__main__':
     pass
