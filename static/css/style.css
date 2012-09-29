@@ -8,3 +8,15 @@
 .input-append {
     margin-left: 20px;
 }
+
+#error {
+    color: red;
+    font-weight: 800;
+    width: 220px;
+    text-align: left;
+    padding-left: 20px;
+}
+
+.no-bottom-margin {
+    margin-bottom: 0px;
+}

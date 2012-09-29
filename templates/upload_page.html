@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
-    <form name="upload_file" action="/checkresult" method="POST" enctype=multipart/form-data class="span6" style="margin-bottom: 0px;">
+    <form name="upload_file" action="/checkresult" method="POST" enctype=multipart/form-data class="form-horizontal no-bottom-margin" onsubmit="return submitFileForm();">
         <legend>Upload python file</legend>
 
         <label for="filename">
@@ -12,7 +12,37 @@
                 </button>
             </div>
         </label>
+        <script>
+            var submitFileForm = function() {
+                var MAX_SIZE = 1024;
+                var errorField = document.getElementById('error');
+                var fileUpload = document.getElementById('code_file');
+                if (!fileUpload.files.length) {
+                    errorField.innerHTML = "Forget file";
+                    return false;
+                }
+                if (window.FileReader) {
+                    var file = fileUpload.files[0];
+                    if (file.name.split('.').pop().toLowerCase() != 'py') {
+                        errorField.innerHTML = "Only python source file (*.py)";
+                        return false;
+                    }
+                    if (file.size > MAX_SIZE) {
+                        errorField.innerHTML = "Max file size - 10Mb";
+                        return false;
+                    }
+                    else if (!file.size) {
+                        errorField.innerHTML = "Empty file";
+                        return false;
+                    }
+                }
+                return true;
+            }
+        </script>
+        <div class="control-group">
         <button type="submit" class="btn span4">Check code</button>
+        <span id="error" class="control-label"></span>
+        </div>
         <script>
             var fileUploadClick = function () {
                 var fileUpload = document.getElementById('code_file');
