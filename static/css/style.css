@@ -20,3 +20,7 @@
 .no-bottom-margin {
     margin-bottom: 0px;
 }
+
+.align-right {
+    text-align: right;
+}
