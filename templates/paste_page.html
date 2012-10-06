@@ -14,11 +14,12 @@
                 var textarea = document.getElementById('code');
                 editor.setTheme("ace/theme/chrome");
                 editor.getSession().setMode("ace/mode/python");
-                editor.getSession().on('change', function(){
+                var codeSubmit = function() {
                     textarea.value = editor.getSession().getValue();
-                });
+                    document.forms['code_form'].submit();
+                }
             </script>
-            <button type="submit" class="btn span3">Check code</button>
+            <button type="submit" class="btn span3" onclick="codeSubmit()">Check code</button>
         </div>
     </form>
 

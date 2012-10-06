@@ -3,8 +3,9 @@
         {% if error %}
             <h2>{{ error }}</h2>
         {% elif result and code_text %}
-            <h1>Check results</h1>
+            <a href="#" onclick="saveSubmit('/savecode')">Save code</a>
 
+            <h1>Check results</h1>
             <table class="table" id="result_table">
                 <thead>
                 <tr>
@@ -24,7 +25,7 @@
                 </thead>
                 <tbody>
                 {% for res in result %}
-                    <tr onclick="">
+                    <tr>
                         <td>
                             {% if res.type == "W" %}
                                 <span class="label label-warning">W{{ res.code }}</span>
@@ -53,6 +54,12 @@
             <a href="/{{ back_url }}" class="btn"><i class="icon-arrow-left"></i> Back</a>
         {%  else %}
             <h2>Your code</h2>
+            <iframe class="hidden" name="save"></iframe>
+            <form class="hidden" name="original_code" action="" method="post">
+                <input type="hidden" name="orig_code" value="{{ code_text }}">
+                <input type="hidden" name="results" value="">
+            </form>
+
             <form name="code_form" action="/checkresult" method="POST">
                 <div class="span12">
                     <label for="code">
@@ -99,8 +106,17 @@
                                 }
                             };
                         }
+                        var codeSubmit = function() {
+                            textarea.value = editor.getSession().getValue();
+                            document.forms['code_form'].submit();
+                        }
+                        var saveSubmit = function(url) {
+                            var form = document.forms['original_code'];
+                            form.action = url;
+                            form.submit()
+                        }
                     </script>
-                    <button type="submit" class="btn span3">Check again</button>
+                    <button type="submit" class="btn span3" onclick="codeSubmit()">Check again</button>
                 </div>
             </form>
     {% endif %}

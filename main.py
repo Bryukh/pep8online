@@ -1,6 +1,7 @@
 #-*- encoding: utf8 -*-
-from flask import Flask, render_template, request, abort, url_for
+from flask import Flask, render_template, request, abort, send_file
 from checktools import check_text, is_py_extension
+import StringIO
 
 app = Flask(__name__)
 try:
@@ -17,6 +18,7 @@ if app.config['LOG']:
     app.logger.addHandler(file_handler)
     app.logger.setLevel(logging.DEBUG)
 
+
 @app.route("/")
 def paste_page():
     """
@@ -24,10 +26,12 @@ def paste_page():
     """
     return render_template("paste_page.html")
 
+
 @app.route("/about")
 def about():
     """About page"""
     return render_template("about.html")
+
 
 @app.route("/upload")
 def upload_page():
@@ -35,6 +39,7 @@ def upload_page():
     Main page with form for upload file
     """
     return render_template("upload_page.html")
+
 
 @app.route("/checkresult", methods=['POST', ])
 def check_result():
@@ -67,9 +72,23 @@ def check_result():
             context['error'] = 'Empty request'
             return render_template("check_result.html", **context)
         else:
-            context['result'] = check_text(context['code_text'], app.config['TEMP_PATH'],
+            context['result'] = check_text(context['code_text'],
+                app.config['TEMP_PATH'],
                 logger=app.logger if app.config['LOG'] else None)
     return render_template("check_result.html", **context)
+
+
+@app.route("/savecode", methods=['POST', ])
+def save_code():
+    if request.method == "POST":
+        code_text = request.form["orig_code"]
+        code_file = StringIO.StringIO()
+        code_file.write(code_text.encode('utf8'))
+        code_file.seek(0)
+        return send_file(code_file, mimetype="application/x-python",
+            as_attachment=True, attachment_filename='code.py')
+    else:
+        return ''
 
 #For development
 if __name__ == '__main__':
