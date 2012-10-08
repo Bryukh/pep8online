@@ -13,11 +13,11 @@
                         <a href="#" onclick="saveSubmit('/savecode', false)">Code</a>
                     </li>
                     <li>
-                        <a href="#" onclick="saveSubmit('/saveresults', true)">Results as txt</a>
+                        <a href="#" onclick="saveSubmit('/saveresult', true)">Results as txt</a>
                     </li>
-                    <li>
-                        <a href="#" onclick="saveSubmit('/savepdf', true)">Results as pdf</a>
-                    </li>
+{#                    <li>#}
+{#                        <a href="#" onclick="saveSubmit('/savepdf', true)">Results as pdf</a>#}
+{#                    </li>#}
                 </ul>
             </li>
             </ul>
@@ -72,7 +72,11 @@
             <iframe class="hidden" name="save"></iframe>
             <form class="hidden" name="original_code" action="" method="post">
                 <input type="hidden" name="orig_code" value="{{ code_text }}">
-                <input type="hidden" name="orig_results" value="{{ result }}">
+                <input type="hidden" name="orig_results"
+                       value="{% for res in result -%}
+                                {{ res.type }}{{ res.code }}:{{ res.line }}:{{ res.place }}:{{ res.text }}
+                                {%- if not loop.last -%}:::{%- endif %}
+                              {%- endfor %}">
             </form>
 
             <form name="code_form" action="/checkresult" method="POST">

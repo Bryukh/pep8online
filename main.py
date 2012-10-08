@@ -1,8 +1,8 @@
 #-*- encoding: utf8 -*-
 from flask import Flask, render_template, request, abort, send_file
 from checktools import check_text, is_py_extension
-import StringIO
 from datetime import datetime
+from generate import gen_text_file, gen_result_text
 
 app = Flask(__name__)
 try:
@@ -21,7 +21,7 @@ if app.config['LOG']:
 
 def get_datetime():
     """return datetime as string"""
-    return datetime.now().strftime("%Y%m%d%H%M%S")
+    return datetime.now().strftime("%Y%m%d_%H%M%S")
 
 @app.route("/")
 def paste_page():
@@ -86,15 +86,24 @@ def check_result():
 def save_code():
     if request.method == "POST":
         code_text = request.form["orig_code"]
-        code_file = StringIO.StringIO()
-        code_file.write(code_text.encode('utf8'))
-        code_file.seek(0)
-        attachment_filename = ''.join(('code', get_datetime(), '.py'))
+        code_file = gen_text_file(code_text)
+        attachment_filename = ''.join(('code_', get_datetime(), '.py'))
         return send_file(code_file, mimetype="application/x-python",
             as_attachment=True, attachment_filename=attachment_filename)
     else:
         return ''
 
+@app.route("/saveresult", methods=['POST', ])
+def save_result():
+    if request.method == "POST":
+        code_text = request.form["orig_code"]
+        code_result = request.form["orig_results"]
+        res_file = gen_text_file(gen_result_text(code_result, code_text))
+        attachment_filename = ''.join(('result_', get_datetime(), '.txt'))
+        return send_file(res_file, mimetype="text/plain",
+            as_attachment=True, attachment_filename=attachment_filename)
+    else:
+        return ''
 
 #For development
 if __name__ == '__main__':
