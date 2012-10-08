@@ -2,6 +2,7 @@
 from flask import Flask, render_template, request, abort, send_file
 from checktools import check_text, is_py_extension
 import StringIO
+from datetime import datetime
 
 app = Flask(__name__)
 try:
@@ -18,6 +19,9 @@ if app.config['LOG']:
     app.logger.addHandler(file_handler)
     app.logger.setLevel(logging.DEBUG)
 
+def get_datetime():
+    """return datetime as string"""
+    return datetime.now().strftime("%Y%m%d%H%M%S")
 
 @app.route("/")
 def paste_page():
@@ -85,10 +89,12 @@ def save_code():
         code_file = StringIO.StringIO()
         code_file.write(code_text.encode('utf8'))
         code_file.seek(0)
+        attachment_filename = ''.join(('code', get_datetime(), '.py'))
         return send_file(code_file, mimetype="application/x-python",
-            as_attachment=True, attachment_filename='code.py')
+            as_attachment=True, attachment_filename=attachment_filename)
     else:
         return ''
+
 
 #For development
 if __name__ == '__main__':
