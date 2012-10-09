@@ -43,3 +43,11 @@
 .indent-link {
     margin-right: 20px;
 }
+
+tr.tr-result:hover {
+    background-color: #e5e5e5;
+    cursor: pointer;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
