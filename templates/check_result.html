@@ -63,7 +63,17 @@
                 </tbody>
             </table>
         {% elif code_text %}
-            <h2>All right!</h2>
+            <h1 class="inline-header">All right</h1>
+            <ul class="nav nav-pills inline-header">
+                <li class="dropdown">
+                    <a class="dropdown-toggle"data-toggle="dropdown" role="button" href="#">Save <b class="caret"></b></a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                        <li>
+                            <a href="#" onclick="saveSubmit('/savecode', false)">Code</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
         {%  endif %}
         {% if error %}
             <a href="/{{ back_url }}" class="btn"><i class="icon-arrow-left"></i> Back</a>
