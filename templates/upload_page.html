@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
 
-    <form name="upload_file" action="/checkresult" method="POST" enctype=multipart/form-data class="form-horizontal no-bottom-margin" onsubmit="return submitFileForm();">
+    <form name="upload_file" action="/checkresult" method="POST"
+          enctype=multipart/form-data class="form-horizontal no-bottom-margin"
+          onsubmit="return submitFileForm();">
         <legend>Upload python file</legend>
 
         <label for="filename">
@@ -12,8 +14,16 @@
                 </button>
             </div>
         </label>
+
+        <div class="control-group">
+            <button type="submit" class="btn span4">Check code</button>
+            <span id="error" class="control-label"></span>
+        </div>
+        <input type="file" name="code_file" class="hidden_upload" id="code_file"
+               onchange="fillFilename()"
+               style="visibility: hidden; height: 1px; margin: 0px;">
         <script>
-            var submitFileForm = function() {
+            function submitFileForm() {
                 var MAX_SIZE = 10 * 1024 * 1024;
                 var errorField = document.getElementById('error');
                 var fileUpload = document.getElementById('code_file');
@@ -38,17 +48,11 @@
                 }
                 return true;
             }
-        </script>
-        <div class="control-group">
-        <button type="submit" class="btn span4">Check code</button>
-        <span id="error" class="control-label"></span>
-        </div>
-        <script>
-            var fileUploadClick = function () {
+            function fileUploadClick() {
                 var fileUpload = document.getElementById('code_file');
                 fileUpload.click();
             }
-            var fillFilename = function () {
+            function fillFilename() {
                 var inputFilename = document.getElementById('filename');
                 var fileUpload = document.getElementById('code_file');
                 var filePath = fileUpload.value;
@@ -58,9 +62,6 @@
                 inputFilename.value = filePath;
             }
         </script>
-        <input type="file" name="code_file" class="hidden_upload" id="code_file" onchange="fillFilename()"
-               style="visibility: hidden; height: 1px; margin: 0px;">
-
     </form>
 
 {% endblock %}
