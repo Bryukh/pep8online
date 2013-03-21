@@ -1,8 +1,11 @@
 #-*- encoding: utf8 -*-
 from flask import Flask, render_template, request, abort, send_file
-from checktools import check_text, is_py_extension
+from checktools import check_text, is_py_extension, pep8parser
 from datetime import datetime
 from generate import gen_text_file, gen_result_text
+
+from pymongo import MongoClient
+from bson.objectid import ObjectId
 
 app = Flask(__name__)
 try:
@@ -104,6 +107,38 @@ def save_result():
             as_attachment=True, attachment_filename=attachment_filename)
     else:
         return ''
+
+@app.route('/share', methods=['GET', 'POST'])
+@app.route('/share/<object_id>')
+def share_result(object_id = None):
+    connection = MongoClient()
+    db = connection[app.config["MONGO_DB"]]
+    collection = db.share
+    context = {
+        'result': '',
+        'code_text': '',
+        'error': ''
+        }
+    if object_id:
+        print(object_id)
+        db_result = collection.find_one({'_id': ObjectId(object_id)})
+        if (db_result):
+            context['code_text'] = db_result["code"]
+            context['result'] = pep8parser(db_result['result'].split(":::"))
+        else:
+            context['error'] = "Sorry, not found"
+        return render_template("check_result.html", **context)
+    print(request.method == "POST")
+    if request.method == "POST":
+        code_text = request.form["code"]
+        code_result = request.form["results"]
+        obj_id =collection.insert({'code': code_text, 'result': code_result, 'date': datetime.now()})
+        return str(obj_id)
+    else:
+        return ''
+
+
+
 
 #For development
 if __name__ == '__main__':

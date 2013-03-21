@@ -20,7 +20,13 @@
 {#                    </li>#}
                 </ul>
             </li>
+            <li>
+                <a role="button" href="#" onclick="shareResult('/share')">Share</a>
+            </li>
             </ul>
+            <h4 id="hidden_url_div" style="display: none">
+            URL: <a id="share_link"></a>
+            </h4>
             <table class="table" id="result_table">
                 <thead>
                 <tr>
@@ -81,8 +87,8 @@
             <h2>Your code</h2>
             <iframe class="hidden" name="save"></iframe>
             <form class="hidden" name="original_code" action="" method="post">
-                <input type="hidden" name="orig_code" value="{{ code_text }}">
-                <input type="hidden" name="orig_results"
+                <input type="hidden" id="orig_code" name="orig_code" value="{{ code_text }}">
+                <input type="hidden" id="orig_results" name="orig_results"
                        value="{% for res in result -%}
                                 {{ res.type }}{{ res.code }}:{{ res.line }}:{{ res.place }}:{{ res.text }}
                                 {%- if not loop.last -%}:::{%- endif %}
@@ -150,6 +156,29 @@
                             }
                             form.submit()
                         }
+
+                        function shareResult(url) {
+                            var code = $("#orig_code").val();
+                            var results = $("#orig_results").val();
+                            var response = $.ajax({
+                                url:url,
+                                type:"POST",
+                                data:{
+                                    code:code,
+                                    results:results
+                                },
+                                datatype:"text"
+                            }).done(function (oid) {
+                                        console.log(oid);
+                                        var link = "http://pep8online.com/share/" + oid;
+                                        var $share_link = $("#share_link");
+                                        $share_link.html("http://pep8online.com/share/" + oid);
+                                        $share_link.attr("href", link);
+                                        $("#hidden_url_div").show(200);
+                                    });
+
+                        }
+
                     </script>
                     <button type="submit" class="btn span3" onclick="codeSubmit()">Check again</button>
                 </div>
