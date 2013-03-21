@@ -5,7 +5,22 @@ import sys
 import os
 import tempfile
 
-def pep8parser(strings):
+def template_pep8(temp):
+    return {'type': temp[3][1],
+            'code': temp[3][2:5],
+            'line': temp[1],
+            'place': temp[2],
+            'text': temp[3][6:]}
+
+def template_results(temp):
+    return {'type': temp[0][0],
+            'code': temp[0][1:],
+            'line': temp[1],
+            'place': temp[2],
+            'text': temp[3]}
+
+
+def pep8parser(strings, temp_dict_f=template_pep8):
     """
     Convert strings from pep8 results to list of dictionaries
     """
@@ -14,12 +29,7 @@ def pep8parser(strings):
         temp = s.split(":")
         if len(temp) < 4:
             continue
-        temp_dict = {'type': temp[3][1],
-                     'code': temp[3][2:5],
-                     'line': temp[1],
-                     'place': temp[2],
-                     'text': temp[3][6:]}
-        result_list.append(temp_dict)
+        result_list.append(temp_dict_f(temp))
     return result_list
 
 
@@ -31,7 +41,7 @@ def check_text(text, temp_dir, logger=None):
     code_file, code_filename = tempfile.mkstemp(dir=temp_dir)
     with open(code_filename, 'w') as code_file:
         code_file.write(text.encode('utf8'))
-    #initialize pep8 checker
+        #initialize pep8 checker
     pep8style = pep8.StyleGuide(parse_argv=False, config_file=False)
     options = pep8style.options
     #redirect print and get result
@@ -49,6 +59,7 @@ def check_text(text, temp_dir, logger=None):
     if logger:
         logger.debug(result)
     return result_dict
+
 
 def is_py_extension(filename):
     return ('.' in filename) and (filename.split('.')[-1] == 'py')

@@ -1,6 +1,6 @@
 #-*- encoding: utf8 -*-
 from flask import Flask, render_template, request, abort, send_file
-from checktools import check_text, is_py_extension, pep8parser
+from checktools import check_text, is_py_extension, pep8parser, template_results
 from datetime import datetime
 from generate import gen_text_file, gen_result_text
 
@@ -120,18 +120,17 @@ def share_result(object_id = None):
         'error': ''
         }
     if object_id:
-        print(object_id)
         db_result = collection.find_one({'_id': ObjectId(object_id)})
         if (db_result):
             context['code_text'] = db_result["code"]
-            context['result'] = pep8parser(db_result['result'].split(":::"))
+            context['result'] = pep8parser(db_result['result'].split(":::"), template_results)
         else:
             context['error'] = "Sorry, not found"
         return render_template("check_result.html", **context)
-    print(request.method == "POST")
     if request.method == "POST":
         code_text = request.form["code"]
         code_result = request.form["results"]
+        print(code_result)
         obj_id =collection.insert({'code': code_text, 'result': code_result, 'date': datetime.now()})
         return str(obj_id)
     else:
