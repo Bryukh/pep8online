@@ -4,7 +4,11 @@
         {% if error %}
             <h2>{{ error }}</h2>
         {% else %}
-            <h1 class="inline-header">Check results</h1>
+            {% if result %}
+                <h1 class="inline-header">Check results</h1>
+            {% else %}
+                <h1 class="inline-header">All right</h1>
+            {% endif %}
             <ul class="nav nav-pills inline-header">
                 <li class="dropdown">
                     <a class="dropdown-toggle"data-toggle="dropdown" role="button" href="#">Save <b class="caret"></b></a>
