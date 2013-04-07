@@ -6,3 +6,4 @@ deployment/
 fabfile.py
 logs/
 temp/
+.DS_STORE
