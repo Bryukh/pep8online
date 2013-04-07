@@ -27,47 +27,49 @@
             <h4 id="hidden_url_div" style="display: none">
             URL: <a id="share_link"></a>
             </h4>
-            <table class="table" id="result_table">
-                <thead>
-                <tr>
-                    <th>
-                        Code
-                    </th>
-                    <th>
-                        Line
-                    </th>
-                    <th>
-                        Place
-                    </th>
-                    <th>
-                        Text
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for res in result %}
-                    <tr class="tr-result">
-                        <td>
-                            {% if res.type == "W" %}
-                                <span class="label label-warning">W{{ res.code }}</span>
-                            {% elif res.type == "E" %}
-                                <span class="label label-important">E{{ res.code }}</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {{ res.line }}
-                        </td>
-                        <td>
-                            {{ res.place }}
-                        </td>
-                        <td>
-                            {{ res.text }}
-                        </td>
+            {%  if result %}
+                <table class="table" id="result_table">
+                    <thead>
+                    <tr>
+                        <th>
+                            Code
+                        </th>
+                        <th>
+                            Line
+                        </th>
+                        <th>
+                            Place
+                        </th>
+                        <th>
+                            Text
+                        </th>
                     </tr>
-                {% endfor %}
+                    </thead>
+                    <tbody>
+                    {% for res in result %}
+                        <tr class="tr-result">
+                            <td>
+                                {% if res.type == "W" %}
+                                    <span class="label label-warning">W{{ res.code }}</span>
+                                {% elif res.type == "E" %}
+                                    <span class="label label-important">E{{ res.code }}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ res.line }}
+                            </td>
+                            <td>
+                                {{ res.place }}
+                            </td>
+                            <td>
+                                {{ res.text }}
+                            </td>
+                        </tr>
+                    {% endfor %}
 
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            {% endif %}
         {%  endif %}
         {% if error %}
             <a href="/{{ back_url }}" class="btn"><i class="icon-arrow-left"></i> Back</a>
