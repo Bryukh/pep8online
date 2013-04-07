@@ -3,26 +3,26 @@
 {% block content %}
         {% if error %}
             <h2>{{ error }}</h2>
-        {% elif result and code_text %}
+        {% else %}
             <h1 class="inline-header">Check results</h1>
             <ul class="nav nav-pills inline-header">
-            <li class="dropdown">
-                <a class="dropdown-toggle"data-toggle="dropdown" role="button" href="#">Save <b class="caret"></b></a>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                    <li>
-                        <a href="#" onclick="saveSubmit('/savecode', false)">Code</a>
-                    </li>
-                    <li>
-                        <a href="#" onclick="saveSubmit('/saveresult', true)">Results as txt</a>
-                    </li>
-{#                    <li>#}
-{#                        <a href="#" onclick="saveSubmit('/savepdf', true)">Results as pdf</a>#}
-{#                    </li>#}
-                </ul>
-            </li>
-            <li>
-                <a role="button" href="#" onclick="shareResult('/share')">Share</a>
-            </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle"data-toggle="dropdown" role="button" href="#">Save <b class="caret"></b></a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                        <li>
+                            <a href="#" onclick="saveSubmit('/savecode', false)">Code</a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="saveSubmit('/saveresult', true)">Results as txt</a>
+                        </li>
+    {#                    <li>#}
+    {#                        <a href="#" onclick="saveSubmit('/savepdf', true)">Results as pdf</a>#}
+    {#                    </li>#}
+                    </ul>
+                </li>
+                <li>
+                    <a role="button" href="#" onclick="shareResult('/share')">Share</a>
+                </li>
             </ul>
             <h4 id="hidden_url_div" style="display: none">
             URL: <a id="share_link"></a>
@@ -68,18 +68,6 @@
 
                 </tbody>
             </table>
-        {% elif code_text %}
-            <h1 class="inline-header">All right</h1>
-            <ul class="nav nav-pills inline-header">
-                <li class="dropdown">
-                    <a class="dropdown-toggle"data-toggle="dropdown" role="button" href="#">Save <b class="caret"></b></a>
-                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                        <li>
-                            <a href="#" onclick="saveSubmit('/savecode', false)">Code</a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
         {%  endif %}
         {% if error %}
             <a href="/{{ back_url }}" class="btn"><i class="icon-arrow-left"></i> Back</a>
