@@ -4,6 +4,7 @@ import StringIO
 import sys
 import os
 import tempfile
+import re
 
 def template_pep8(temp):
     return {'type': temp[3][1],
@@ -26,10 +27,10 @@ def pep8parser(strings, temp_dict_f=template_pep8):
     """
     result_list = []
     for s in strings:
-        temp = s.split(":")
-        if len(temp) < 4:
-            continue
-        result_list.append(temp_dict_f(temp))
+        print(s)
+        temp = re.findall(r"(.+?):(.+?):(.+?):(.*)", s)
+        if temp and len(temp[0]) >= 4:
+            result_list.append(temp_dict_f(temp[0]))
     return result_list
 
 
