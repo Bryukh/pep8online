@@ -56,10 +56,11 @@ def check_text(text, temp_dir, logger=None):
     temp_outfile.close()
     code_file.close()
     os.remove(code_filename)
-    result_dict = pep8parser(result)
+    fullResultList = pep8parser(result)
+    fullResultList.sort(key=lambda x: (int(x['line']), int(x["place"])))
     if logger:
         logger.debug(result)
-    return result_dict
+    return fullResultList
 
 
 def is_py_extension(filename):
