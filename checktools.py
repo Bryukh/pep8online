@@ -27,7 +27,6 @@ def pep8parser(strings, temp_dict_f=template_pep8):
     """
     result_list = []
     for s in strings:
-        print(s)
         temp = re.findall(r"(.+?):(.+?):(.+?):(.*)", s)
         if temp and len(temp[0]) >= 4:
             result_list.append(temp_dict_f(temp[0]))
