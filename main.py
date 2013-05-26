@@ -3,6 +3,8 @@ from flask import Flask, render_template, request, abort, send_file
 from checktools import check_text, is_py_extension, pep8parser, template_results
 from datetime import datetime
 from generate import gen_text_file, gen_result_text
+from tools import generate_short_name
+
 
 from pymongo import MongoClient
 from bson.objectid import ObjectId
@@ -118,6 +120,9 @@ def save_result():
         return ''
 
 
+#TODO
+#It will be remove later after 30-60 days
+#now it only for old links
 @app.route('/share', methods=['GET', 'POST'])
 @app.route('/share/<object_id>')
 def share_result(object_id=None):
@@ -141,11 +146,47 @@ def share_result(object_id=None):
     if request.method == "POST":
         code_text = request.form["code"]
         code_result = request.form["results"]
-        print(code_result)
         obj_id = collection.insert({'code': code_text,
                                     'result': code_result,
                                     'date': datetime.now()})
         return str(obj_id)
+    else:
+        return ''
+
+
+@app.route('/s', methods=['GET', 'POST'])
+@app.route('/s/<key>')
+def share_result(key=None):
+    connection = MongoClient()
+    db = connection[app.config["MONGO_DB"]]
+    collection = db.share
+    context = {
+        'result': '',
+        'code_text': '',
+        'error': ''
+    }
+    if key:
+        db_result = collection.find_one({'key': key})
+        if db_result:
+            context['code_text'] = db_result["code"]
+            context['result'] = pep8parser(db_result['result'].split(":::"),
+                                           template_results)
+        else:
+            context['error'] = "Sorry, not found"
+        return render_template("check_result.html", **context)
+    if request.method == "POST":
+        code_text = request.form["code"]
+        code_result = request.form["results"]
+        key = generate_short_name()
+        while collection.find_one({'key': key}):
+            key = generate_short_name()
+        collection.insert({
+            'key': key,
+            'code': code_text,
+            'result': code_result,
+            'date': datetime.now()
+        })
+        return str(key)
     else:
         return ''
 

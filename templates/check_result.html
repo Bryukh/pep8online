@@ -163,10 +163,9 @@
                                 },
                                 datatype:"text"
                             }).done(function (oid) {
-                                        console.log(oid);
-                                        var link = "http://pep8online.com/share/" + oid;
+                                        var link = "http://pep8online.com/s/" + oid;
                                         var $share_link = $("#share_link");
-                                        $share_link.html("http://pep8online.com/share/" + oid);
+                                        $share_link.html("http://pep8online.com/s/" + oid);
                                         $share_link.attr("href", link);
                                         $("#hidden_url_div").show(200);
                                     });
