@@ -125,7 +125,7 @@ def save_result():
 #now it only for old links
 @app.route('/share', methods=['GET', 'POST'])
 @app.route('/share/<object_id>')
-def share_result(object_id=None):
+def old_share_result(object_id=None):
     connection = MongoClient()
     db = connection[app.config["MONGO_DB"]]
     collection = db.share
