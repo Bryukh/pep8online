@@ -22,9 +22,11 @@ if app.config['LOG']:
     app.logger.addHandler(file_handler)
     app.logger.setLevel(logging.DEBUG)
 
+
 def get_datetime():
     """return datetime as string"""
     return datetime.now().strftime("%Y%m%d_%H%M%S")
+
 
 @app.route("/")
 def paste_page():
@@ -59,7 +61,7 @@ def check_result():
         'code_text': '',
         'error': '',
         'back_url': back_url,
-        }
+    }
     if request.method == "POST":
         if str(request.referrer).replace(request.host_url, '') == 'upload':
             code_file = request.files['code_file']
@@ -79,9 +81,11 @@ def check_result():
             context['error'] = 'Empty request'
             return render_template("check_result.html", **context)
         else:
-            context['result'] = check_text(context['code_text'],
+            context['result'] = check_text(
+                context['code_text'],
                 app.config['TEMP_PATH'],
-                logger=app.logger if app.config['LOG'] else None)
+                logger=app.logger if app.config['LOG'] else None
+            )
     return render_template("check_result.html", **context)
 
 
@@ -91,10 +95,13 @@ def save_code():
         code_text = request.form["orig_code"]
         code_file = gen_text_file(code_text)
         attachment_filename = ''.join(('code_', get_datetime(), '.py'))
-        return send_file(code_file, mimetype="application/x-python",
-            as_attachment=True, attachment_filename=attachment_filename)
+        return send_file(code_file,
+                         mimetype="application/x-python",
+                         as_attachment=True,
+                         attachment_filename=attachment_filename)
     else:
         return ''
+
 
 @app.route("/saveresult", methods=['POST', ])
 def save_result():
@@ -103,14 +110,17 @@ def save_result():
         code_result = request.form["orig_results"]
         res_file = gen_text_file(gen_result_text(code_result, code_text))
         attachment_filename = ''.join(('result_', get_datetime(), '.txt'))
-        return send_file(res_file, mimetype="text/plain",
-            as_attachment=True, attachment_filename=attachment_filename)
+        return send_file(res_file,
+                         mimetype="text/plain",
+                         as_attachment=True,
+                         attachment_filename=attachment_filename)
     else:
         return ''
 
+
 @app.route('/share', methods=['GET', 'POST'])
 @app.route('/share/<object_id>')
-def share_result(object_id = None):
+def share_result(object_id=None):
     connection = MongoClient()
     db = connection[app.config["MONGO_DB"]]
     collection = db.share
@@ -118,12 +128,13 @@ def share_result(object_id = None):
         'result': '',
         'code_text': '',
         'error': ''
-        }
+    }
     if object_id:
         db_result = collection.find_one({'_id': ObjectId(object_id)})
-        if (db_result):
+        if db_result:
             context['code_text'] = db_result["code"]
-            context['result'] = pep8parser(db_result['result'].split(":::"), template_results)
+            context['result'] = pep8parser(db_result['result'].split(":::"),
+                                           template_results)
         else:
             context['error'] = "Sorry, not found"
         return render_template("check_result.html", **context)
@@ -131,12 +142,12 @@ def share_result(object_id = None):
         code_text = request.form["code"]
         code_result = request.form["results"]
         print(code_result)
-        obj_id =collection.insert({'code': code_text, 'result': code_result, 'date': datetime.now()})
+        obj_id = collection.insert({'code': code_text,
+                                    'result': code_result,
+                                    'date': datetime.now()})
         return str(obj_id)
     else:
         return ''
-
-
 
 
 #For development

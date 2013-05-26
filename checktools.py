@@ -6,12 +6,14 @@ import os
 import tempfile
 import re
 
+
 def template_pep8(temp):
     return {'type': temp[3][1],
             'code': temp[3][2:5],
             'line': temp[1],
             'place': temp[2],
             'text': temp[3][6:]}
+
 
 def template_results(temp):
     return {'type': temp[0][0],
