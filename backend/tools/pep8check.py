@@ -1,6 +1,9 @@
 #-*- encoding: utf8 -*-
 import pep8
-import StringIO
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 import sys
 import os
 import tempfile

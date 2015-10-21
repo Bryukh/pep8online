@@ -1,5 +1,8 @@
 #-*- encoding: utf8 -*-
-from StringIO import StringIO
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 
 
 def gen_text_file(text):

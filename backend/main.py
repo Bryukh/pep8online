@@ -1,25 +1,32 @@
-#-*- encoding: utf8 -*-
-from flask import Flask, render_template, request, abort, send_file
-from checktools import check_text, is_py_extension, pep8parser, template_results
+# -*- encoding: utf8 -*-
 from datetime import datetime
-from generate import gen_text_file, gen_result_text
-from tools import generate_short_name
 
-
+from flask import Flask, render_template, request, abort, send_file
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 
-app = Flask(__name__)
+from tools.pep8check import check_text, is_py_extension, pep8parser, template_results
+from backend.generate import gen_text_file, gen_result_text
+from tools.utils import generate_short_name
+
 try:
-    app.config.from_object('production_settings')
+    import production_settings as settings
 except ImportError:
     try:
-        app.config.from_object('development_settings')
+        import development_settings as settings
     except ImportError:
-        app.config.from_object('settings')
+        import settings
+
+static_folder = getattr(settings, "STATIC_FOLDER", None)
+static_url_path = getattr(settings, "STATIC_URL_PATH", None)
+
+
+app = Flask(__name__, static_folder=static_folder, static_url_path=static_url_path)
+app.config.from_object(settings)
 
 if app.config['LOG']:
     import logging
+
     file_handler = logging.FileHandler(app.config['LOG_FILE'])
     app.logger.addHandler(file_handler)
     app.logger.setLevel(logging.DEBUG)
@@ -35,7 +42,7 @@ def paste_page():
     """
     Main page with form for paste code
     """
-    return render_template("paste_page.html")
+    return app.send_static_file('index.html')
 
 
 @app.route("/about")
@@ -119,41 +126,6 @@ def save_result():
     else:
         return ''
 
-
-#TODO
-#It will be remove later after 30-60 days
-#now it only for old links
-@app.route('/share', methods=['GET', 'POST'])
-@app.route('/share/<object_id>')
-def old_share_result(object_id=None):
-    connection = MongoClient()
-    db = connection[app.config["MONGO_DB"]]
-    collection = db.share
-    context = {
-        'result': '',
-        'code_text': '',
-        'error': ''
-    }
-    if object_id:
-        db_result = collection.find_one({'_id': ObjectId(object_id)})
-        if db_result:
-            context['code_text'] = db_result["code"]
-            context['result'] = pep8parser(db_result['result'].split(":::"),
-                                           template_results)
-        else:
-            context['error'] = "Sorry, not found"
-        return render_template("check_result.html", **context)
-    if request.method == "POST":
-        code_text = request.form["code"]
-        code_result = request.form["results"]
-        obj_id = collection.insert({'code': code_text,
-                                    'result': code_result,
-                                    'date': datetime.now()})
-        return str(obj_id)
-    else:
-        return ''
-
-
 @app.route('/s', methods=['GET', 'POST'])
 @app.route('/s/<key>')
 def share_result(key=None):
@@ -191,7 +163,7 @@ def share_result(key=None):
         return ''
 
 
-#For development
+# For development
 if __name__ == '__main__':
     try:
         app.config.from_object('development_settings')
