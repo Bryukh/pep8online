@@ -7,3 +7,8 @@ fabfile.py
 logs/
 temp/
 .DS_STORE
+
+
+bower_components
+node_modules
+frontend/build

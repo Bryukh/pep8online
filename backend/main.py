@@ -45,11 +45,6 @@ def paste_page():
     return app.send_static_file('index.html')
 
 
-@app.route("/about")
-def about():
-    """About page"""
-    return render_template("about.html")
-
 
 @app.route("/upload")
 def upload_page():
