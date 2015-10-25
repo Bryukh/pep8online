@@ -12,3 +12,5 @@ temp/
 bower_components
 node_modules
 frontend/build
+
+static/build
